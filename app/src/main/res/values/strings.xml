@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PixelProbe QR Deluxe</string>
+
+    <!--    bottomBar-->
+    <string name="home">Home</string>
+    <string name="history">History</string>
+</resources>

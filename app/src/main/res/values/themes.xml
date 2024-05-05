@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.PixelProbeQRDeluxe" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Cambio el color de la barra de arriba. -->
+        <item name="android:statusBarColor">@color/secondary</item>
+    </style>
+
+    <style name="Theme.PixelProbeQRDeluxe" parent="Base.Theme.PixelProbeQRDeluxe" />
+
+    <style name="Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/secondary</item>
+    </style>
+
+
+</resources>
