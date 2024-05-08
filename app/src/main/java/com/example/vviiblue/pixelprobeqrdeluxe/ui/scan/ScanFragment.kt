@@ -35,11 +35,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ScanFragment : Fragment() {
-    //activityViewModels vinculo a los ViewModels (HistoryViewModel y HomeViewModel) al ciclo de vida del Activity
-    // de esta manera puedo obtener una referencia de los ViewModel compartidos entre varios fragmentos que esten asociados
-    // al mismo actividad (el MainActivity)
-    private val historyViewModel by activityViewModels<HistoryViewModel>()
-    private val homeViewModel by activityViewModels<HomeViewModel>()
 
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var barcodeBoxView: BarcodeBoxView
@@ -152,7 +147,7 @@ class ScanFragment : Fragment() {
                             barcodeBoxView,
                             binding.rvCameraScan.width.toFloat(),
                             binding.rvCameraScan.height.toFloat()
-                        ){result -> barCodeReaded(result)}
+                        ) { result -> barCodeReaded(result) }
                     )
 
                 }
@@ -175,12 +170,8 @@ class ScanFragment : Fragment() {
     private fun barCodeReaded(result: String) {
         /** guardo lo que obtuve */
         lifecycleScope.launch {
-            val scanObjectUI = ScanObjectUI(result, "s", "f")
-            scanViewModel.insertScanCode(scanObjectUI).also {
-                historyViewModel.onScanUpdated(scanObjectUI)
-                homeViewModel.onScanUpdated(scanObjectUI)
-            }
-
+            val scanObjectUI = ScanObjectUI("-1", result.trim(), "s", "f")
+            scanViewModel.insertScanCode(scanObjectUI)
         }
         /** cierro el scan */
         exitScanCam()

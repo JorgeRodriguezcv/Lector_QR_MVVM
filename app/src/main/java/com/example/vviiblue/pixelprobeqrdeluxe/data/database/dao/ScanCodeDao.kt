@@ -17,7 +17,7 @@ interface ScanCodeDao {
     suspend fun insertAllScanCodes(list:List<ScanCodeEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertScanCode(scan:ScanCodeEntity)
+    suspend fun insertScanCode(scan:ScanCodeEntity): Long
 
     @Query("DELETE FROM scan_code_table WHERE id = :scanId")
     suspend fun deleteScanCode(scanId : Int)

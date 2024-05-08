@@ -19,6 +19,9 @@ object RoomModule {
 
     private const val SCAN_CODE_DATABASE_NAME = "pixel_probe_qr"
 
+    @Volatile
+    private var INSTANCE: AppDatabase? = null
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
@@ -38,4 +41,5 @@ object RoomModule {
     fun provideRepository(dao: ScanCodeDao): Repository {
         return RepositoryImpl(dao)
     }
+
 }

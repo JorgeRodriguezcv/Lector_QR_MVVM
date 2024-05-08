@@ -14,5 +14,12 @@
         <item name="android:textColor">@color/secondary</item>
     </style>
 
+    <style name="SubTitle" parent="Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/primaryDark</item>
+    </style>
+
+
 
 </resources>

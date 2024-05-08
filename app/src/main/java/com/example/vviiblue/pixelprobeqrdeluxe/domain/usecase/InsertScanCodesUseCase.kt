@@ -8,6 +8,8 @@ import javax.inject.Inject
 class InsertScanCodesUseCase @Inject constructor(private val repository: Repository){
 
     // suspend operator fun invoke(list:List<ScanObjectDomain>) = repository.insertScanCode(list.map { it.toDatabase() })
-    suspend operator fun invoke(scan:ScanObjectDomain) = repository.insertScanCode(scan.toDatabase())
+    suspend operator fun invoke(scan: ScanObjectDomain): Long {
+        return repository.insertScanCode(scan.toDatabase())
+    }
 
 }

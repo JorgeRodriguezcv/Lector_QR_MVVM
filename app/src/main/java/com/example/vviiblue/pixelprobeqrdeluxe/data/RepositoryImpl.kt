@@ -17,8 +17,12 @@ class RepositoryImpl @Inject constructor(private val dao: ScanCodeDao) : Reposit
         dao.insertAllScanCodes(listScans)
     }
 
-    override suspend fun insertScanCode(scanCode: ScanCodeEntity) {
-       dao.insertScanCode(scanCode)
+    override suspend fun insertScanCode(scanCode: ScanCodeEntity): Long {
+      return dao.insertScanCode(scanCode)
+    }
+
+    override suspend fun deleteScanCode(idScan: String) {
+        dao.deleteScanCode(idScan.toInt())
     }
 
 }

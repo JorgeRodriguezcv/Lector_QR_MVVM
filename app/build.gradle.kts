@@ -25,12 +25,20 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
+            resValue("string", "nombreDeLaApp", "PixelProbeQR")
             isMinifyEnabled = false
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        getByName("debug"){
+            resValue("string", "nombreDeLaApp", "[DEBUG] PixelProbeQR")
+            isDebuggable = true
+            resValue("string", "arisname", "[DEBUG] PixelProbeQR")
         }
     }
     compileOptions {
@@ -43,6 +51,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     kotlin{

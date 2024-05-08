@@ -4,11 +4,12 @@ import com.example.vviiblue.pixelprobeqrdeluxe.data.database.entities.ScanCodeEn
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.model.ScanObjectUI
 
 data class ScanObjectDomain(
+    val scanIdCode: String,
     val scanCode: String,
     val scanDate: String,
     val scanNote: String
 )
 
-fun ScanCodeEntity.toScanDomain() = ScanObjectDomain(code,date,note)
-fun ScanObjectUI.toScanDomain() = ScanObjectDomain(scanCode = scanCode,scanDate = scanDate,scanNote = scanNote)
+fun ScanCodeEntity.toScanDomain() = ScanObjectDomain(id.toString(),code,date,note)
+fun ScanObjectUI.toScanDomain() = ScanObjectDomain(scanIdCode = scanIdCode ,scanCode = scanCode,scanDate = scanDate,scanNote = scanNote)
 

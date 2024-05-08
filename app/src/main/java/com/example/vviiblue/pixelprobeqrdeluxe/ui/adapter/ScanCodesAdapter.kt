@@ -4,10 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vviiblue.pixelprobeqrdeluxe.R
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.ScanData
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.model.ScanObjectUI
 
-class ScanCodesAdapter(private var scanList: List<ScanObjectUI> = emptyList(), private val onItemSelected:(ScanObjectUI)->Unit) :
-    RecyclerView.Adapter<ScanCodesViewholder>() {
+class ScanCodesAdapter(
+    private var scanList: List<ScanObjectUI> = emptyList(),
+    private val onItemSelected: (ScanData) -> Unit,
+    private val onDeleteItem: (String) -> Unit,
+    private val onGoToWeb: (String) -> Unit
+) : RecyclerView.Adapter<ScanCodesViewholder>() {
 
         fun updateList(list:List<ScanObjectUI>){
             scanList = list
@@ -21,6 +26,6 @@ class ScanCodesAdapter(private var scanList: List<ScanObjectUI> = emptyList(), p
     override fun getItemCount() = scanList.size
 
     override fun onBindViewHolder(holder: ScanCodesViewholder, position: Int) {
-        holder.render(scanList[position],onItemSelected)
+        holder.render(scanList[position],onItemSelected,onDeleteItem,onGoToWeb)
     }
 }
