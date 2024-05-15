@@ -34,6 +34,7 @@ class ScanRepository @Inject constructor(
              val id = _insertScanCodesUseCase(scanCode.toScanDomain())
              if (id != null) {
                  scanCode.copy(scanIdCode = id.toString()).also { updatedScan ->
+
                      _listScanCodes.value = listOf(updatedScan) + _listScanCodes.value //listOf(updatedScan) creo una lista con un solo elemento
                      Log.d("Insert", "Inserted scan with ID: $id")
                  }
@@ -41,16 +42,6 @@ class ScanRepository @Inject constructor(
                  Log.e("Insert", "Failed to insert scan")
              }
          }
-//         withContext(Dispatchers.IO) {
-//            _insertScanCodesUseCase(scanCode.toScanDomain())
-//        }.also { id ->
-//            scanCode.copy(scanIdCode = id.toString()).also { updatedScan ->
-//                _listScanCodes.value = (_listScanCodes.value + updatedScan)
-//            }
-//        }
-
-         /** return runBlocking { */
-
     }
 
      suspend fun deleteScanCode(idCodeScan: String) {

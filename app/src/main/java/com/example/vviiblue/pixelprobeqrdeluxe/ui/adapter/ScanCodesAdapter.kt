@@ -11,7 +11,7 @@ class ScanCodesAdapter(
     private var scanList: List<ScanObjectUI> = emptyList(),
     private val onItemSelected: (ScanData) -> Unit,
     private val onDeleteItem: (String) -> Unit,
-    private val onGoToWeb: (String) -> Unit
+    private val goToActionScan: (ScanData) -> Unit
 ) : RecyclerView.Adapter<ScanCodesViewholder>() {
 
         fun updateList(list:List<ScanObjectUI>){
@@ -26,6 +26,6 @@ class ScanCodesAdapter(
     override fun getItemCount() = scanList.size
 
     override fun onBindViewHolder(holder: ScanCodesViewholder, position: Int) {
-        holder.render(scanList[position],onItemSelected,onDeleteItem,onGoToWeb)
+        holder.render(scanList[position],onItemSelected,onDeleteItem,goToActionScan)
     }
 }

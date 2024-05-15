@@ -20,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.vviiblue.pixelprobeqrdeluxe.R
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.barcode.QrCodeAnalyzer
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.barcode.view.BarcodeBoxView
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.history.HistoryFragment
@@ -51,14 +52,14 @@ class ScanFragment : Fragment() {
     }
 
     private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission() //ActivityResultContracts.RequestPermission() : aqui se solicita el permiso
-    ) { isGranted -> // isGranted: indica si el permiso fue otorgado o no (true o false)
+        ActivityResultContracts.RequestPermission() //Se solicita el permiso
+    ) { isGranted -> // Indica si el permiso fue otorgado o no (true o false)
         if (isGranted) {
             startCamera()
         } else {
             Toast.makeText(
                 requireContext(),
-                "Acepta los permisos",
+                requireContext().getString(R.string.accept_permission),
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -128,7 +129,7 @@ class ScanFragment : Fragment() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
-            // Cámara disponible
+            // Obtengo la cámara disponible
             val cameraProvider = cameraProviderFuture.get()
 
             // Configurar la vista previa

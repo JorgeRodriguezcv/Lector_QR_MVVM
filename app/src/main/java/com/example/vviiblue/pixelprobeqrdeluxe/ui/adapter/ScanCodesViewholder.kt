@@ -26,7 +26,7 @@ class ScanCodesViewholder(view: View) : RecyclerView.ViewHolder(view) {
         scanObject: ScanObjectUI,
         onItemSelected: (ScanData) -> Unit,
         onDeleteItem: (String) -> Unit,
-        onGoToWeb: (String) -> Unit
+        goToActionScan: (ScanData) -> Unit
     ) {
         var scanData:ScanData
 
@@ -43,7 +43,8 @@ class ScanCodesViewholder(view: View) : RecyclerView.ViewHolder(view) {
             }
         }
 
-        binding.tvSubTitleScanItem.text = if (scanObject.scanCode.length > 80) {
+        binding.tvTitleScanItem.text = scanObject.scanDate
+            binding.tvSubTitleScanItem.text = if (scanObject.scanCode.length > 80) {
             scanObject.scanCode.substring(0, 30) + "..."
         } else {
             scanObject.scanCode
@@ -54,7 +55,6 @@ class ScanCodesViewholder(view: View) : RecyclerView.ViewHolder(view) {
                 binding.viewItemId,
                 exectLambdaForItemSelected = {
                     onItemSelected(scanData)
-                   // onItemSelected(scanObject.scanCode)
                 })
         }
 
@@ -63,7 +63,7 @@ class ScanCodesViewholder(view: View) : RecyclerView.ViewHolder(view) {
         }
 
         binding.ivActionScanItem.setOnClickListener {
-            onGoToWeb(scanObject.scanCode)
+            goToActionScan(scanData)
         }
 
     }

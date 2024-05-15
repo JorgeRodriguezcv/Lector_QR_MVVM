@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.vviiblue.pixelprobeqrdeluxe.data.database.entities.ScanCodeEntity
 
-@Database(entities = [ScanCodeEntity::class], version = 1)
+@Database(entities = [ScanCodeEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getScanCodeDao(): ScanCodeDao
 }

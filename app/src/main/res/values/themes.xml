@@ -7,10 +7,14 @@
 
     <style name="Theme.PixelProbeQRDeluxe" parent="Base.Theme.PixelProbeQRDeluxe" />
 
-    <style name="Title">
+    <style name="TitleBaseStyle">
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/nunito</item>
         <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/primaryDark</item>
+    </style>
+
+    <style name="Title" parent="TitleBaseStyle">
         <item name="android:textColor">@color/secondary</item>
     </style>
 

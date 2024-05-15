@@ -2,7 +2,10 @@ package com.example.vviiblue.pixelprobeqrdeluxe.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.ScanData
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.ScanRepository
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.SelectedItem
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.Utils.getConfigurationWifi
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.model.ScanObjectUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -14,8 +17,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-//    private val _getScanCodesUseCase: GetScanCodesUseCase,
-//    private val _deleteScanCodeUseCase: DeleteScanCodeUseCase
     private val scanRepository: ScanRepository
 ) : ViewModel() {
 
@@ -25,16 +26,12 @@ class HomeViewModel @Inject constructor(
     private var _webViewEvents = MutableStateFlow<WebViewEvent>(WebViewEvent.PageFinished)
     val webViewEvent : StateFlow<WebViewEvent> = _webViewEvents
 
-//    init {
-//        getAllScanCodes()
-//
-//    }
+    private var _selectedItem = MutableStateFlow<SelectedItem?>(null)
+    val selectedItem: StateFlow<SelectedItem?> = _selectedItem
 
     fun getAllScanCodes() {
         /** lanzo una corrutina, para invocar la operacion del caso de uso que es Suspend */
         viewModelScope.launch {
-
-        //    if (_listScanCodes.value.isEmpty()) {
                 /** ejecuto en hilo secundario para recuperar los valores la primea vez */
                 val listScans = scanRepository.getAllScanCodes()
                 if (listScans.size > 3) {
@@ -42,7 +39,6 @@ class HomeViewModel @Inject constructor(
                 } else {
                     _listScanCodes.value = listScans
                 }
-         //   }
 
             scanRepository.listScanCodes.collect { listScans ->
                 if (listScans.size > 3) {
@@ -72,4 +68,22 @@ class HomeViewModel @Inject constructor(
     fun onPageFinished() {
         _webViewEvents.value = WebViewEvent.PageFinished
     }
+
+    fun handleSelectedItem(dataScan: ScanData) {
+        _selectedItem.value = null
+        when (dataScan) {
+            is ScanData.Url -> {
+                _webViewEvents.value = WebViewEvent.PageStarted
+                _selectedItem.value = SelectedItem.Url(dataScan.url)
+            }
+            is ScanData.Text -> {
+                _selectedItem.value = SelectedItem.Text(dataScan.text)
+            }
+            is ScanData.Wifi -> {
+                val listPartsConfigWifi = getConfigurationWifi(dataScan.wifiData)
+                _selectedItem.value = SelectedItem.Wifi(listPartsConfigWifi[0], listPartsConfigWifi[1], listPartsConfigWifi[2])
+            }
+        }
+    }
+
 }

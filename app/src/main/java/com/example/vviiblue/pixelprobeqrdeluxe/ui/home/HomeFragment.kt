@@ -1,8 +1,14 @@
 package com.example.vviiblue.pixelprobeqrdeluxe.ui.home
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.net.wifi.WifiConfiguration
+import android.net.wifi.WifiManager
+import android.net.wifi.WifiNetworkSuggestion
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -11,6 +17,8 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -20,7 +28,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vviiblue.pixelprobeqrdeluxe.databinding.FragmentHomeBinding
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.adapter.ScanCodesAdapter
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.PermissionUtils
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.PermissionViewModel
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.ScanData
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.SelectedItem
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.Utils.getConfigurationWifi
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.Utils.toEditable
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.WifiUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,14 +46,27 @@ class HomeFragment : Fragment() {
 
     private val homeViewModel by activityViewModels<HomeViewModel>()
 
+    //Permission controller
+    private val permissionViewModel by activityViewModels<PermissionViewModel>()
+
+
     private lateinit var scansAdapter: ScanCodesAdapter
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        if (permissions.all { it.value }) {
+            permissionViewModel.setPermissionsGranted(true)
+        } else {
+            Toast.makeText(requireContext(), "Permiso de WIFI denegado", Toast.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-        // Inflate the layout for this fragment
         return binding.root
     }
 
@@ -48,7 +75,17 @@ class HomeFragment : Fragment() {
         initUI()
         initRecycleview()
         initListeners()
-        observePageStatus()
+        initObserves()
+
+        checkPermissionsAndConnect()
+    }
+
+    private fun checkPermissionsAndConnect() {
+        if (PermissionUtils.hasLocationPermissions(requireContext())) {
+            permissionViewModel.setPermissionsGranted(true)
+        } else {
+            requestPermissionLauncher.launch(PermissionUtils.WIFI_PERMISSIONS)
+        }
     }
 
     private fun initUI() {
@@ -67,7 +104,7 @@ class HomeFragment : Fragment() {
         scansAdapter = ScanCodesAdapter(
             onItemSelected = { itemScanSelected -> onItemSelected(itemScanSelected) },
             onDeleteItem = { itemToDelete -> deleteScanCode(itemToDelete) },
-            onGoToWeb = { itemScanSelected -> goToWebScan(itemScanSelected) }
+            goToActionScan = { itemScanSelected -> goToActionScan(itemScanSelected) }
         )
 
 
@@ -79,13 +116,12 @@ class HomeFragment : Fragment() {
 
     private fun initListeners() {
 
-        binding.webView.webViewClient = object : WebViewClient() {
+        binding.idWebViewInclude.webView.webViewClient = object : WebViewClient() {
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
-                // Ocultar la barra de progreso
                 homeViewModel.onPageFinished()
             }
 
@@ -103,6 +139,11 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun initObserves() {
+        observePageStatus()
+        observeSelectedItem()
+    }
+
     private fun observePageStatus() {
         lifecycleScope.launch() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -115,72 +156,85 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
 
+    private fun observeSelectedItem() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.selectedItem.collect { selectedItem ->
+                    when (selectedItem) {
+                        is SelectedItem.Url -> {
+                            binding.idWebViewInclude.root.isVisible = true
+                            binding.idWebViewInclude.webView.loadUrl(selectedItem.url)
+                        }
+                        is SelectedItem.Text -> {
+                            binding.idTextInclude.root.isVisible = true
+                            binding.idTextInclude.textQrCode.text = selectedItem.text.toEditable()
+                        }
+                        is SelectedItem.Wifi -> {
+                            binding.idWifiInclude.root.isVisible = true
+                            binding.idWifiInclude.apply {
+                                textEncryption.text = selectedItem.encryption.toEditable()
+                                textPassword.text = selectedItem.password.toEditable()
+                                textNetworkName.text = selectedItem.networkName.toEditable()
+                            }
+                        }
+                        null -> {
+
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun onItemSelected(dataScan: ScanData) {
-        if(binding.idWifiInclude.root.isVisible)
+        if (binding.idWifiInclude.root.isVisible)
             binding.idWifiInclude.root.isVisible = false
 
-        if(binding.idTextInclude.root.isVisible)
+        if (binding.idTextInclude.root.isVisible)
             binding.idTextInclude.root.isVisible = false
 
+        homeViewModel.handleSelectedItem(dataScan)
 
-        when(dataScan){
+    }
+
+
+
+    private fun deleteScanCode(idCodeScan: String) {
+            homeViewModel.deleteScan(idCodeScan)
+    }
+
+    private fun goToActionScan(dataScan: ScanData) {
+
+        when (dataScan) {
             is ScanData.Url -> {
-                homeViewModel.onPageStarted()
-                binding.webView.loadUrl(dataScan.url)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(dataScan.url))
+                startActivity(intent)
             }
+
             is ScanData.Text -> {
                 binding.idTextInclude.root.isVisible = true
                 binding.idTextInclude.textQrCode.text = dataScan.text.toEditable()
             }
+
             is ScanData.Wifi -> {
-                showConfigurationWifi(dataScan.wifiData)
-                binding.idWifiInclude.root.isVisible = true
+                if (PermissionUtils.hasLocationPermissions(requireContext())) {
+                    val listPartsConfigWifi = getConfigurationWifi(dataScan.wifiData)
+                    WifiUtils.connectToWifi(
+                        requireContext(),
+                        listPartsConfigWifi[0],
+                        listPartsConfigWifi[1],
+                        listPartsConfigWifi[2]
+                    )
+                } else {
+                    checkPermissionsAndConnect()
+                }
             }
         }
     }
 
-    private fun showConfigurationWifi(wifiData: String) {
-        val parts: List<String> = wifiData.split(";")
-        var ssid: String = ""
-        var password: String = ""
-        var securityType: String = ""
-        for (part in parts) {
-            if (part.startsWith("S:")) {
-                ssid = part.substring(2)
-            } else if (part.startsWith("P:")) {
-                password = part.substring(2)
-            } else if (part.startsWith("WIFI")) {
-                val _securityType = part.split(":".toRegex()).dropLastWhile { it.isEmpty() }
-                    .toTypedArray()[2]
-                securityType = _securityType
-            }
-        }
-
-        binding.idWifiInclude.textEncryption.text = securityType.toEditable()
-        binding.idWifiInclude.textPassword.text = password.toEditable()
-        binding.idWifiInclude.textNetworkName.text = ssid.toEditable()
-    }
-
-    private fun deleteScanCode(idCodeScan: String) {
-        lifecycleScope.launch() {
-            homeViewModel.deleteScan(idCodeScan)
-        }
-    }
-
-    private fun goToWebScan(dataScan: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(dataScan))
-        startActivity(intent)
-    }
-
-
-
 }
 
 
-/** Función de extensión para convertir un String a Editable */
-private fun String.toEditable(): Editable {
-  return  Editable.Factory.getInstance().newEditable(this)
-}
+

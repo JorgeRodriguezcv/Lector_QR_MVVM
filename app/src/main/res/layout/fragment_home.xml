@@ -8,8 +8,8 @@
     android:background="@color/primary">
 
     <include
-        android:id="@+id/idWifiInclude"
-        layout="@layout/material_card_view_wifi_form"
+        android:id="@+id/idWebViewInclude"
+        layout="@layout/layout_view_webview"
         android:layout_width="match_parent"
         android:layout_height="290dp"
         android:visibility="invisible"
@@ -19,7 +19,7 @@
 
     <include
         android:id="@+id/idTextInclude"
-        layout="@layout/material_card_view_text_form"
+        layout="@layout/layout_view_text_form"
         android:layout_width="match_parent"
         android:layout_height="290dp"
         android:visibility="invisible"
@@ -27,21 +27,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <WebView
-        android:id="@+id/webView"
+    <include
+        android:id="@+id/idWifiInclude"
+        layout="@layout/layout_view_wifi_form"
         android:layout_width="match_parent"
         android:layout_height="290dp"
+        android:visibility="invisible"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ProgressBar
         android:id="@+id/pb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/webView"
+        app:layout_constraintBottom_toBottomOf="@id/idWebViewInclude"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -55,14 +56,16 @@
         android:layout_marginVertical="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/webView"
+        app:layout_constraintTop_toBottomOf="@+id/idWebViewInclude"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:strokeColor="@color/secondary"
         android:layout_marginBottom="49dp"
         android:background="@color/accent">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/primary"
             android:layout_marginBottom="12dp"/>
 
 
