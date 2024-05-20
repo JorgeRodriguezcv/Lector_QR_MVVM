@@ -33,7 +33,7 @@ class ScanRepository @Inject constructor(
          withContext(Dispatchers.IO) {
              val id = _insertScanCodesUseCase(scanCode.toScanDomain())
              if (id != null) {
-                 scanCode.copy(scanIdCode = id.toString()).also { updatedScan ->
+                 scanCode.copy(scanIdCode = id.toInt()).also { updatedScan ->
 
                      _listScanCodes.value = listOf(updatedScan) + _listScanCodes.value //listOf(updatedScan) creo una lista con un solo elemento
                      Log.d("Insert", "Inserted scan with ID: $id")
@@ -44,7 +44,7 @@ class ScanRepository @Inject constructor(
          }
     }
 
-     suspend fun deleteScanCode(idCodeScan: String) {
+     suspend fun deleteScanCode(idCodeScan: Int) {
             try {
                 /** ejecuto en hilo secundario */
                 withContext(Dispatchers.IO) { _deleteScanCodeUseCase(idCodeScan) }.also {
@@ -56,8 +56,8 @@ class ScanRepository @Inject constructor(
     }
 
 
-    fun onScanDeleteScan(idCodeScan: String) {
+    fun onScanDeleteScan(idCodeScan: Int) {
         // actualiza la lista y notifica a los observadores
-        _listScanCodes.value = _listScanCodes.value.filter { it.scanIdCode.toInt() != idCodeScan.toInt() }
+        _listScanCodes.value = _listScanCodes.value.filter { it.scanIdCode != idCodeScan }
     }
 }

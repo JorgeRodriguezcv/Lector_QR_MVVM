@@ -82,7 +82,8 @@ class HistoryFragment : Fragment() {
         scansAdapter = ScanCodesAdapter(
             onItemSelected = { itemScanSelected -> onItemSelected(itemScanSelected) },
             onDeleteItem = { itemToDelete -> deleteScanCode(itemToDelete) },
-            goToActionScan = { itemScanSelected -> goToActionScan(itemScanSelected) }
+            goToActionScan = { itemScanSelected -> goToActionScan(itemScanSelected) },
+            onNoteItem = { itemNoteSelected -> onNoteItem(itemNoteSelected)}
         )
         binding.rvHistoryScans.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -108,9 +109,10 @@ class HistoryFragment : Fragment() {
                 val inflater = LayoutInflater.from(requireContext())
                 val dialogView = inflater.inflate(R.layout.layout_view_text_form, null)
                 val bindingDialog = LayoutViewTextFormBinding.bind(dialogView)
+
                 bindingDialog.root.setBackgroundResource(R.color.accent)
                 bindingDialog.root.isVisible = true
-                bindingDialog.textQrCode.text = dataScan.text
+                bindingDialog.textContent.text = dataScan.text
 
                 showDialog(dialogView,dataScan)
             }
@@ -135,7 +137,7 @@ class HistoryFragment : Fragment() {
         }
     }
 
-    private fun showDialog(dialogView: View,dataScan: ScanData) {
+    private fun showDialog(dialogView: View, dataScan: ScanData?) {
         val builder = AlertDialog.Builder(requireContext())
 
         if(dataScan is ScanData.Wifi){
@@ -160,7 +162,7 @@ class HistoryFragment : Fragment() {
     }
 
 
-    private fun deleteScanCode(idCodeScan: String) {
+    private fun deleteScanCode(idCodeScan: Int) {
             historyViewModel.deleteScan(idCodeScan)
     }
 
@@ -174,6 +176,15 @@ class HistoryFragment : Fragment() {
             }
 
             is ScanData.Text -> {
+                val inflater = LayoutInflater.from(requireContext())
+                val dialogView = inflater.inflate(R.layout.layout_view_text_form, null)
+                val bindingDialog = LayoutViewTextFormBinding.bind(dialogView)
+
+                bindingDialog.root.setBackgroundResource(R.color.accent)
+                bindingDialog.root.isVisible = true
+                bindingDialog.textContent.text = dataScan.text
+
+                showDialog(dialogView,dataScan)
             }
 
             is ScanData.Wifi -> {
@@ -195,5 +206,20 @@ class HistoryFragment : Fragment() {
             checkPermissionsAndConnect()
         }
     }
+
+    private fun onNoteItem(note: String) {
+        val inflater = LayoutInflater.from(requireContext())
+        val dialogView = inflater.inflate(R.layout.layout_view_text_form, null)
+        val bindingDialog = LayoutViewTextFormBinding.bind(dialogView)
+
+        bindingDialog.root.setBackgroundResource(R.color.accent)
+        bindingDialog.root.isVisible = true
+        bindingDialog.textContent.text = note
+        bindingDialog.textTitle.text = requireContext().getString(R.string.note_title)
+
+
+        showDialog(dialogView,null)
+    }
+
 
 }

@@ -25,8 +25,9 @@ class ScanCodesViewholder(view: View) : RecyclerView.ViewHolder(view) {
     fun render(
         scanObject: ScanObjectUI,
         onItemSelected: (ScanData) -> Unit,
-        onDeleteItem: (String) -> Unit,
-        goToActionScan: (ScanData) -> Unit
+        onDeleteItem: (Int) -> Unit,
+        goToActionScan: (ScanData) -> Unit,
+        onNoteItem: (String) -> Unit
     ) {
         var scanData:ScanData
 
@@ -64,6 +65,10 @@ class ScanCodesViewholder(view: View) : RecyclerView.ViewHolder(view) {
 
         binding.ivActionScanItem.setOnClickListener {
             goToActionScan(scanData)
+        }
+
+        binding.ivScanCodeNote.setOnClickListener {
+            onNoteItem(scanObject.scanNote)
         }
 
     }

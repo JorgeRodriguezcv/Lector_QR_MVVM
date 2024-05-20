@@ -1,5 +1,6 @@
 package com.example.vviiblue.pixelprobeqrdeluxe.ui.scan
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import com.example.vviiblue.pixelprobeqrdeluxe.databinding.FragmentScanBinding
 import android.util.Log
 import android.util.Size
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -148,7 +150,7 @@ class ScanFragment : Fragment() {
                             barcodeBoxView,
                             binding.rvCameraScan.width.toFloat(),
                             binding.rvCameraScan.height.toFloat()
-                        ) { result -> barCodeReaded(result) }
+                        ) { result , note-> barCodeReaded(result,note) }
                     )
 
                 }
@@ -168,10 +170,10 @@ class ScanFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    private fun barCodeReaded(result: String) {
-        /** guardo lo que obtuve */
+    private fun barCodeReaded(result: String, note: String) {
+
         lifecycleScope.launch {
-            val scanObjectUI = ScanObjectUI("-1", result.trim(), "s", "f")
+            val scanObjectUI = ScanObjectUI(-1, result.trim(), "...", note)
             scanViewModel.insertScanCode(scanObjectUI)
         }
         /** cierro el scan */

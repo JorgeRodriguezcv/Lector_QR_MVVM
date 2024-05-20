@@ -113,4 +113,14 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+
+    //**UnitTesting
+    testImplementation(libs.junit)
+    testImplementation ("io.kotlintest:kotlintest-runner-junit5:3.4.2")
+    testImplementation ("io.mockk:mockk:1.12.3")
+    testImplementation("org.mockito:mockito-core:4.0.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+
 }

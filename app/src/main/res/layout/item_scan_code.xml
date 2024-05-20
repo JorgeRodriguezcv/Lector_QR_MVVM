@@ -29,7 +29,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/ivScanCodeItem"
+                    android:id="@+id/ivScanCodeNote"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_margin="16dp"

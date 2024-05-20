@@ -7,6 +7,6 @@ import javax.inject.Inject
 
 class DeleteScanCodeUseCase  @Inject constructor(private val repository: Repository){
 
-    suspend operator fun invoke(idScan:String) = repository.deleteScanCode(idScan)
+    suspend operator fun invoke(idScan:Int) = repository.deleteScanCode(idScan)
 
 }

@@ -26,6 +26,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.vviiblue.pixelprobeqrdeluxe.R
 import com.example.vviiblue.pixelprobeqrdeluxe.databinding.FragmentHomeBinding
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.adapter.ScanCodesAdapter
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.PermissionUtils
@@ -104,7 +105,8 @@ class HomeFragment : Fragment() {
         scansAdapter = ScanCodesAdapter(
             onItemSelected = { itemScanSelected -> onItemSelected(itemScanSelected) },
             onDeleteItem = { itemToDelete -> deleteScanCode(itemToDelete) },
-            goToActionScan = { itemScanSelected -> goToActionScan(itemScanSelected) }
+            goToActionScan = { itemScanSelected -> goToActionScan(itemScanSelected) },
+            onNoteItem = { itemNoteSelected -> onNoteItem(itemNoteSelected)}
         )
 
 
@@ -169,7 +171,8 @@ class HomeFragment : Fragment() {
                         }
                         is SelectedItem.Text -> {
                             binding.idTextInclude.root.isVisible = true
-                            binding.idTextInclude.textQrCode.text = selectedItem.text.toEditable()
+                            binding.idTextInclude.textTitle.text = requireContext().getString(R.string.textCodeQR)
+                            binding.idTextInclude.textContent.text = selectedItem.text.toEditable()
                         }
                         is SelectedItem.Wifi -> {
                             binding.idWifiInclude.root.isVisible = true
@@ -201,7 +204,7 @@ class HomeFragment : Fragment() {
 
 
 
-    private fun deleteScanCode(idCodeScan: String) {
+    private fun deleteScanCode(idCodeScan: Int) {
             homeViewModel.deleteScan(idCodeScan)
     }
 
@@ -215,7 +218,8 @@ class HomeFragment : Fragment() {
 
             is ScanData.Text -> {
                 binding.idTextInclude.root.isVisible = true
-                binding.idTextInclude.textQrCode.text = dataScan.text.toEditable()
+                binding.idTextInclude.textTitle.text = requireContext().getString(R.string.textCodeQR)
+                binding.idTextInclude.textContent.text = dataScan.text.toEditable()
             }
 
             is ScanData.Wifi -> {
@@ -232,6 +236,12 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun onNoteItem(note: String) {
+        binding.idTextInclude.root.isVisible = true
+        binding.idTextInclude.textTitle.text = requireContext().getString(R.string.note_title)
+        binding.idTextInclude.textContent.text = note
     }
 
 }

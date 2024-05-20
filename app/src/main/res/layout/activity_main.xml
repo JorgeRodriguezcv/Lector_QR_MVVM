@@ -66,8 +66,8 @@
         android:layout_height="wrap_content"
         android:elevation="8dp"
         android:background="@color/primaryDark"
-        app:strokeColor="@color/primaryDark"
-        app:cardCornerRadius="30dp"
+        app:strokeColor="@color/secondary"
+        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

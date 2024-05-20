@@ -40,7 +40,7 @@ class HistoryViewModel @Inject constructor(
         }
     }
 
-    fun deleteScan(idCodeScan: String) {
+    fun deleteScan(idCodeScan: Int) {
         viewModelScope.launch {
             try {
                 /** ejecuto en hilo secundario */

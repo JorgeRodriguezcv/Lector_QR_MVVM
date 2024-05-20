@@ -7,5 +7,5 @@ interface Repository {
     suspend fun getScanCodes(): List<ScanObjectDomain>
     suspend fun insertScanCode(list:List<ScanCodeEntity>)
     suspend fun insertScanCode(scanCode:ScanCodeEntity): Long
-    suspend fun deleteScanCode(idScan:String)
+    suspend fun deleteScanCode(idScan:Int)
 }

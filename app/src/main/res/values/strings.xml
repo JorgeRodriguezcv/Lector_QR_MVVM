@@ -14,4 +14,7 @@
     <string name="cancel_dialog">Cancel</string>
     <string name="accept_permission">Acepta los permisos</string>
     <string name="accept_dialog">Accept</string>
+    <string name="add_message_dialog_note">Do you want to enter a note?</string>
+    <string name="add_a_note">Enter a Note</string>
+    <string name="note_title">Note QR Code</string>
 </resources>
