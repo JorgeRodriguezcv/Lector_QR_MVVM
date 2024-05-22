@@ -60,6 +60,7 @@ android {
 }
 
 dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     val navVersion = "2.7.1"
     val roomVersion = "2.5.2"
     val cameraVersion = "1.2.3"
@@ -113,10 +114,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
+    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.48")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48")
+    androidTestImplementation ("androidx.fragment:fragment-testing:1.6.1")
 
     //**UnitTesting
-    testImplementation(libs.junit)
     testImplementation ("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation ("io.mockk:mockk:1.12.3")
     testImplementation("org.mockito:mockito-core:4.0.0")

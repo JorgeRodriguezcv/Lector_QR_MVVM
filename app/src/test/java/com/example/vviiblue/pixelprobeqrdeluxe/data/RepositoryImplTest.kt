@@ -1,13 +1,12 @@
 package com.example.vviiblue.pixelprobeqrdeluxe.data
 
 import com.example.vviiblue.pixelprobeqrdeluxe.data.database.dao.ScanCodeDao
-import com.example.vviiblue.pixelprobeqrdeluxe.data.database.entities.ScanCodeEntity
-import io.kotlintest.shouldNotBe
+import com.example.vviiblue.pixelprobeqrdeluxe.motherobject.ScanCodesMotherObject.entitiesTest
+import com.example.vviiblue.pixelprobeqrdeluxe.motherobject.ScanCodesMotherObject.scanCodeTest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +16,7 @@ class RepositoryImplTest {
 
     @MockK
     lateinit var dao: ScanCodeDao   // I inject dependency, i simulate the injection with dagger hilt
-    lateinit var repositoryImpl: RepositoryImpl
+    private lateinit var repositoryImpl: RepositoryImpl
 
     @Before
     fun setUp() {
@@ -29,14 +28,9 @@ class RepositoryImplTest {
     @Test
     fun `getAllScanCodes should return a correct list mapped`() =
         runBlocking {  // i use "runBlocking" because i want to simulate the method suspend of "insertScanCode"
-            val entities  = listOf(
-                ScanCodeEntity(1, "scanCode01", "date01", "text note"),
-                ScanCodeEntity(2, "scanCode02", "date02", "text note"),
-                ScanCodeEntity(3, "scanCode03", "date03", ""),
-                ScanCodeEntity(4, "scanCode04", "date04", "text note test")
-            )
+
             /**Given*/
-            coEvery { dao.getAllScanCodes() } returns entities
+            coEvery { dao.getAllScanCodes() } returns entitiesTest
 
             /**when*/
             val result = repositoryImpl.getScanCodes()
@@ -44,9 +38,9 @@ class RepositoryImplTest {
             /**then*/
             coVerify { dao.getAllScanCodes() } // getAllScanCodes was called in Dao?
 
-            assertEquals(entities.size, result.size)
+            assertEquals(entitiesTest.size, result.size)
 
-            entities.forEachIndexed{index,entity -> // all of scan code are equals?
+            entitiesTest.forEachIndexed{index,entity -> // all of scan code are equals?
                 assertEquals(entity.id, result[index].scanIdCode)
                 assertEquals(entity.code, result[index].scanCode)
                 assertEquals(entity.note, result[index].scanNote)
@@ -58,15 +52,14 @@ class RepositoryImplTest {
     fun `insertScanCode should return a correct id insert of the new scan code in Room`() =
         runBlocking {
             /**Given*/
-            val scanCode = ScanCodeEntity(-1,"new Code Insert", "date of new code scan", "note")
             val resultIdNewScanCodeInserted = 5L
-            coEvery { dao.insertScanCode(scanCode) } returns resultIdNewScanCodeInserted
+            coEvery { dao.insertScanCode(scanCodeTest) } returns resultIdNewScanCodeInserted
 
             /**When*/
-            val resultId = repositoryImpl.insertScanCode(scanCode)
+            val resultId = repositoryImpl.insertScanCode(scanCodeTest)
 
             /**Then*/
-            coVerify{dao.insertScanCode(scanCode)}
+            coVerify{dao.insertScanCode(scanCodeTest)}
             assertEquals(resultIdNewScanCodeInserted, resultId)
 
         }
