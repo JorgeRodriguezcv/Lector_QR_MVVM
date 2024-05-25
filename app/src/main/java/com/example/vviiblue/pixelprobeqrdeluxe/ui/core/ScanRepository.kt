@@ -22,6 +22,7 @@ class ScanRepository @Inject constructor(
     val listScanCodes: StateFlow<List<ScanObjectUI>> = _listScanCodes
 
      suspend  fun getAllScanCodes(): List<ScanObjectUI> {
+         println("ScanRepository getAllScanCodes ")
         if(_listScanCodes.value.isEmpty()) {
             val listScans = withContext(Dispatchers.IO) { _getScanCodesUseCase() }
             _listScanCodes.value = listScans
@@ -47,6 +48,7 @@ class ScanRepository @Inject constructor(
      suspend fun deleteScanCode(idCodeScan: Int) {
             try {
                 /** ejecuto en hilo secundario */
+                println("ScanRepository deleteScanCode - idCodeScan: $idCodeScan")
                 withContext(Dispatchers.IO) { _deleteScanCodeUseCase(idCodeScan) }.also {
                     onScanDeleteScan(idCodeScan)
                 }
@@ -58,6 +60,8 @@ class ScanRepository @Inject constructor(
 
     fun onScanDeleteScan(idCodeScan: Int) {
         // actualiza la lista y notifica a los observadores
-        _listScanCodes.value = _listScanCodes.value.filter { it.scanIdCode != idCodeScan }
+        println("Antes - onScanDeleteScan - _listScanCodes.value: ${listScanCodes.value}")
+        _listScanCodes.value = listScanCodes.value.filter { it.scanIdCode != idCodeScan }
+        println("Despues - onScanDeleteScan - _listScanCodes.value: ${listScanCodes.value}")
     }
 }

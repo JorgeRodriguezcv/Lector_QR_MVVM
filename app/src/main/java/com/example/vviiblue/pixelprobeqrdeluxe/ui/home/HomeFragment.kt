@@ -92,7 +92,7 @@ class HomeFragment : Fragment() {
     private fun initUI() {
         lifecycleScope.launch() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                homeViewModel.getAllScanCodes()
+               // homeViewModel.getAllScanCodes()
                 homeViewModel.listScanCodes.collect() { listScans ->
                     scansAdapter.updateList(listScans)
                 }

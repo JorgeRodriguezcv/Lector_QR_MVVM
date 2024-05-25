@@ -1,6 +1,7 @@
 package com.example.vviiblue.pixelprobeqrdeluxe.motherobject
 
 import com.example.vviiblue.pixelprobeqrdeluxe.data.database.entities.ScanCodeEntity
+import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.ScanData
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.model.ScanObjectUI
 
 object ScanCodesMotherObject {
@@ -20,5 +21,9 @@ object ScanCodesMotherObject {
         ScanObjectUI(3, "scanCode03", "date03", ""),
         ScanObjectUI(4, "scanCode04", "date04", "text note test")
     )
+
+    val urlDataTest = ScanData.Url("https://google.com")
+    val textDataTest = ScanData.Text("Hello World")
+    val wifiDataTest = ScanData.Wifi("WIFI:T:WPA;S:test;P:passsss;H:;;")
 
 }

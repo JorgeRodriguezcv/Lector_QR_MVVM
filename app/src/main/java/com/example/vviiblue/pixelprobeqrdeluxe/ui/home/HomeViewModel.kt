@@ -29,32 +29,31 @@ class HomeViewModel @Inject constructor(
     private var _selectedItem = MutableStateFlow<SelectedItem?>(null)
     val selectedItem: StateFlow<SelectedItem?> = _selectedItem
 
+    init {
+        viewModelScope.launch {
+            scanRepository.getAllScanCodes()
+            scanRepository.listScanCodes.collect { listScans ->
+                _listScanCodes.value = if (listScans.size > 3) listScans.subList(0, 3) else listScans
+            }
+        }
+    }
+
     fun getAllScanCodes() {
         /** lanzo una corrutina, para invocar la operacion del caso de uso que es Suspend */
         viewModelScope.launch {
-                /** ejecuto en hilo secundario para recuperar los valores la primea vez */
                 val listScans = scanRepository.getAllScanCodes()
-                if (listScans.size > 3) {
-                    _listScanCodes.value = listScans.subList(0, 3)
-                } else {
-                    _listScanCodes.value = listScans
-                }
-
-            scanRepository.listScanCodes.collect { listScans ->
-                if (listScans.size > 3) {
-                    _listScanCodes.value = listScans.subList(0, 3)
-                } else {
-                    _listScanCodes.value = listScans
-                }
-            }
+            _listScanCodes.value =  if (listScans.size > 3) listScans.subList(0, 3) else listScans
         }
     }
 
     fun deleteScan(idCodeScan: Int) {
         viewModelScope.launch {
             try {
-                /** ejecuto en hilo secundario */
-                withContext(Dispatchers.IO) { scanRepository.deleteScanCode(idCodeScan) }
+                println("Antes - Se elimina el idCodeScan : $idCodeScan")
+                println("Antes - listScanCodes : ${listScanCodes.value}")
+              scanRepository.deleteScanCode(idCodeScan)
+                println("Despues - Se elimina el idCodeScan : $idCodeScan")
+                println("Despues - listScanCodes : ${listScanCodes.value}")
             } catch (e: Exception) {
                 println("Error al eliminar el objeto: ${e.message}")
             }
