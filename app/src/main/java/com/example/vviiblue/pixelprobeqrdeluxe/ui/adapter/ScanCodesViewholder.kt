@@ -21,6 +21,9 @@ class ScanCodesViewholder(view: View) : RecyclerView.ViewHolder(view) {
     private val defaultColor = Color.WHITE
     private val selectedColor = ContextCompat.getColor(context, R.color.secondary)
 
+    companion object {
+        var lastSelectedItemScan: View? = null
+    }
 
     fun render(
         scanObject: ScanObjectUI,
@@ -79,6 +82,11 @@ class ScanCodesViewholder(view: View) : RecyclerView.ViewHolder(view) {
         exectLambdaForItemSelected: () -> Unit
     ) {
 
+        // Reset the color of the previously selected item to the default color
+        lastSelectedItemScan?.let { lastItemSelected ->
+            lastItemSelected.setBackgroundColor(defaultColor)
+        }
+
         val animator = ValueAnimator.ofObject(ArgbEvaluator(), defaultColor, selectedColor)
         animator.duration = 500
         animator.interpolator = DecelerateInterpolator()
@@ -92,6 +100,7 @@ class ScanCodesViewholder(view: View) : RecyclerView.ViewHolder(view) {
 
             override fun onAnimationEnd(p0: Animator) {
                 exectLambdaForItemSelected()
+                lastSelectedItemScan = selectedView
             }
 
             override fun onAnimationCancel(p0: Animator) {
