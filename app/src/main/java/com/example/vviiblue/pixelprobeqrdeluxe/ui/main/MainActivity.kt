@@ -11,7 +11,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.vviiblue.pixelprobeqrdeluxe.R
 import com.example.vviiblue.pixelprobeqrdeluxe.databinding.ActivityMainBinding
-import com.google.zxing.integration.android.IntentIntegrator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

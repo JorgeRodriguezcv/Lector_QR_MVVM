@@ -17,11 +17,11 @@ android {
     defaultConfig {
         applicationId = "com.example.vviiblue.pixelprobeqrdeluxe"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.vviiblue.pixelprobeqrdeluxe.utils.CustomTestRunner"
     }
 
     buildTypes {
@@ -61,6 +61,7 @@ android {
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    androidTestImplementation(libs.androidx.rules)
     val navVersion = "2.7.1"
     val roomVersion = "2.5.2"
     val cameraVersion = "1.2.3"
@@ -101,7 +102,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+ //   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 
     // Librerías de AndroidX
     implementation(libs.androidx.core.ktx)
@@ -113,16 +115,42 @@ dependencies {
     // Pruebas
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+
     androidTestImplementation ("com.google.dagger:hilt-android-testing:2.48")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48")
-    androidTestImplementation ("androidx.fragment:fragment-testing:1.6.1")
 
     //**UnitTesting
     testImplementation ("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation ("io.mockk:mockk:1.12.3")
     testImplementation("org.mockito:mockito-core:4.0.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    //Mockito
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+
+    androidTestImplementation ("org.mockito:mockito-core:4.0.0")
+    androidTestImplementation ("org.mockito:mockito-android:4.0.0")
+
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+
+    testImplementation("androidx.test:core-ktx:1.5.0")
+    testImplementation("androidx.test.ext:junit-ktx:1.1.5")
+
+    //Espresso
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test.espresso:espresso-intents:3.4.0")
+
+    //Robolectric
+    testImplementation("org.robolectric:robolectric:4.12.2")
+    //Hamcrest
+    testImplementation("org.hamcrest:hamcrest:2.2")
+
+    //Fragment Testing
+    debugImplementation("androidx.fragment:fragment-testing:1.7.1")
+
+    //Arquitectura de componentes
+    androidTestImplementation ("androidx.arch.core:core-testing:2.2.0")
+
+
 
 }

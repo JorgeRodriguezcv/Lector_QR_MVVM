@@ -8,6 +8,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.*
@@ -27,7 +28,7 @@ class RepositoryImplTest {
 
     @Test
     fun `getAllScanCodes should return a correct list mapped`() =
-        runBlocking {  // i use "runBlocking" because i want to simulate the method suspend of "insertScanCode"
+        runTest {  // i use "runTest" because i want to simulate the method suspend of "insertScanCode"
 
             /**Given*/
             coEvery { dao.getAllScanCodes() } returns entitiesTest
@@ -36,7 +37,7 @@ class RepositoryImplTest {
             val result = repositoryImpl.getScanCodes()
 
             /**then*/
-            coVerify { dao.getAllScanCodes() } // getAllScanCodes was called in Dao?
+            coVerify { dao.getAllScanCodes() } // Verific that getAllScanCodes was called in Dao
 
             assertEquals(entitiesTest.size, result.size)
 
@@ -50,7 +51,7 @@ class RepositoryImplTest {
 
     @Test
     fun `insertScanCode should return a correct id insert of the new scan code in Room`() =
-        runBlocking {
+        runTest {
             /**Given*/
             val resultIdNewScanCodeInserted = 5L
             coEvery { dao.insertScanCode(scanCodeTest) } returns resultIdNewScanCodeInserted

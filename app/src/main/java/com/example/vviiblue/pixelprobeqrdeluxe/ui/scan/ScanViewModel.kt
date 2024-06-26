@@ -22,7 +22,7 @@ class ScanViewModel @Inject constructor(
         }
     }
 
-    private fun getCurrentDate(): String {
+    open fun getCurrentDate(): String {
         val dateFormat = SimpleDateFormat("EEEE, d 'de' yyyy", Locale.getDefault())
         return dateFormat.format(Date())
     }

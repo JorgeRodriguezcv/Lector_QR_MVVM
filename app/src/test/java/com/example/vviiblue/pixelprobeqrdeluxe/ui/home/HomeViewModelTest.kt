@@ -1,5 +1,6 @@
 package com.example.vviiblue.pixelprobeqrdeluxe.ui.home
 
+import com.example.vviiblue.pixelprobeqrdeluxe.MainDispatcherRule
 import com.example.vviiblue.pixelprobeqrdeluxe.motherobject.ScanCodesMotherObject.scanObjectUITest
 import com.example.vviiblue.pixelprobeqrdeluxe.motherobject.ScanCodesMotherObject.textDataTest
 import com.example.vviiblue.pixelprobeqrdeluxe.motherobject.ScanCodesMotherObject.urlDataTest
@@ -13,6 +14,8 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.unmockkAll
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -23,6 +26,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 //*****
 
@@ -33,12 +37,14 @@ class HomeViewModelTest{
     private lateinit var viewModel: HomeViewModel
 
     // I create a "fake" main dispatcher to replace "Dispatchers.Main" in the test, i don't have access to the Android Main Thread in the "Unit Test", this is necessary because it is used in "HomeViewModel"
-    private val testDispatcher = UnconfinedTestDispatcher()
+ //  private val testDispatcher = UnconfinedTestDispatcher()
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Before
     fun setUp(){
         MockKAnnotations.init(this, relaxUnitFun = true)
-        Dispatchers.setMain(testDispatcher)
 
         //Mock responses for scanRepository's methods
         coEvery { scanRepository.getAllScanCodes() } returns scanObjectUITest
@@ -49,8 +55,9 @@ class HomeViewModelTest{
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain() // reset main dispatcher
+        unmockkAll() // clean the mocks created
     }
+
 
 
     @Test
@@ -73,18 +80,22 @@ class HomeViewModelTest{
 
         /**Given */
         val scanIdToRemove = scanObjectUITest.first().scanIdCode
+        val initialSize = viewModel.listScanCodes.value.size
+
+        // Mock listScanCodes flow with initial data
+        coEvery { scanRepository.listScanCodes } returns MutableStateFlow(scanObjectUITest)
+
 
         /**When */
         viewModel.deleteScan(scanIdToRemove)
-        coEvery { scanRepository.deleteScanCode(scanIdToRemove) }
-
-
         advanceUntilIdle() // Ensure all coroutines have completed
         val result = viewModel.listScanCodes.value
 
         /**Then */
         coVerify { scanRepository.deleteScanCode(scanIdToRemove) }
-
+        assertEquals(initialSize - 1, result.size)
+        assertEquals(scanObjectUITest.subList(1, 3), result) // Check remaining items
+        Assert.assertFalse(result.any { it.scanIdCode == scanIdToRemove })
     }
 
     @Test

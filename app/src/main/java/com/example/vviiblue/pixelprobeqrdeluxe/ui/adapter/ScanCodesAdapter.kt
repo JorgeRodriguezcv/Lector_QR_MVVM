@@ -1,5 +1,6 @@
 package com.example.vviiblue.pixelprobeqrdeluxe.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -18,10 +19,12 @@ class ScanCodesAdapter(
 ) : RecyclerView.Adapter<ScanCodesViewholder>() {
 
         fun updateList(list:List<ScanObjectUI>){
+            Log.e("PRUEBAAAA","2 - pasando por updateList : listScans = ${list.size}")
             val diff = ScanCodeDiffUtil(scanList,list)
             val result = DiffUtil.calculateDiff(diff)
             scanList = list
             result.dispatchUpdatesTo(this)
+            Log.e("PRUEBAAAA","4 - pasando por updateList : listScans = ${list.size}")
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScanCodesViewholder {

@@ -11,6 +11,7 @@ import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +38,9 @@ import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.Utils.getConfigurationWif
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.Utils.toEditable
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.WifiUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -62,6 +65,8 @@ class HomeFragment : Fragment() {
             Toast.makeText(requireContext(), "Permiso de WIFI denegado", Toast.LENGTH_LONG).show()
         }
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,11 +95,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun initUI() {
-        lifecycleScope.launch() {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                // homeViewModel.getAllScanCodes()
-                homeViewModel.listScanCodes.collect() { listScans ->
-                    scansAdapter.updateList(listScans)
+                homeViewModel.listScanCodes.collect { listScans ->
+                    withContext(Dispatchers.Main.immediate) {
+                        scansAdapter.updateList(listScans)
+                    }
                 }
 
             }
@@ -147,8 +154,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun observePageStatus() {
-        lifecycleScope.launch() {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 homeViewModel.webViewEvent.collect { event: WebViewEvent? ->
                     when (event) {
                         is WebViewEvent.PageStarted -> binding.pb.isVisible = true
@@ -161,7 +168,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeSelectedItem() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 homeViewModel.selectedItem.collect { selectedItem ->
                     when (selectedItem) {

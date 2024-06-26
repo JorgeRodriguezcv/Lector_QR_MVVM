@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
     private val scanRepository: ScanRepository
 ) : ViewModel() {
 
-    private var _listScanCodes = MutableStateFlow<List<ScanObjectUI>>(emptyList())
+    private val _listScanCodes = MutableStateFlow<List<ScanObjectUI>>(emptyList())
     val listScanCodes: StateFlow<List<ScanObjectUI>> = _listScanCodes
 
     private var _webViewEvents = MutableStateFlow<WebViewEvent>(WebViewEvent.PageFinished)
@@ -41,7 +41,7 @@ class HomeViewModel @Inject constructor(
     fun getAllScanCodes() {
         /** lanzo una corrutina, para invocar la operacion del caso de uso que es Suspend */
         viewModelScope.launch {
-                val listScans = scanRepository.getAllScanCodes()
+                val listScans = withContext(Dispatchers.IO) { scanRepository.getAllScanCodes() }/*= scanRepository.getAllScanCodes()*/
             _listScanCodes.value =  if (listScans.size > 3) listScans.subList(0, 3) else listScans
         }
     }
@@ -52,6 +52,9 @@ class HomeViewModel @Inject constructor(
                 println("Antes - Se elimina el idCodeScan : $idCodeScan")
                 println("Antes - listScanCodes : ${listScanCodes.value}")
               scanRepository.deleteScanCode(idCodeScan)
+
+                val updatedList = _listScanCodes.value.filter { it.scanIdCode != idCodeScan }
+                _listScanCodes.value = updatedList
                 println("Despues - Se elimina el idCodeScan : $idCodeScan")
                 println("Despues - listScanCodes : ${listScanCodes.value}")
             } catch (e: Exception) {
