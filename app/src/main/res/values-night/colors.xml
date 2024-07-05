@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color> <!-- Mantén el negro igual -->
+    <color name="white">#FFFFFFFF</color> <!-- Mantén el blanco igual -->
+
+    <color name="primary">#1A1641</color> <!-- Un tono más oscuro del color primario -->
+    <color name="primaryDark">#0D0928</color> <!-- Un tono más oscuro y profundo del color primario oscuro -->
+    <color name="secondary">#FFD700</color> <!-- Un tono más suave y dorado del secundario para menor intensidad -->
+
+    <color name="test">#D32F2F</color> <!-- Un rojo menos saturado y más suave para las pruebas -->
+
+    <color name="accent">#FFFFFFFF</color> <!-- Un amarillo claro para el color de acento, menos brillante que el blanco -->
+
+
+</resources>

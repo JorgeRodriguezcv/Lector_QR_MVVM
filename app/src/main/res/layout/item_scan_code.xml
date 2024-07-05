@@ -11,6 +11,7 @@
         android:id="@+id/mcvItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
         android:layout_marginHorizontal="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +54,7 @@
                         android:id="@+id/tvSubTitleScanItem"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        style="@style/SubTitle"
                         android:textSize="11dp"
                         tools:text="text sub text" />
                 </androidx.appcompat.widget.LinearLayoutCompat>

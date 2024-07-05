@@ -6,8 +6,6 @@ import com.example.vviiblue.pixelprobeqrdeluxe.domain.model.ScanObjectDomain
 import javax.inject.Inject
 
 class InsertScanCodesUseCase @Inject constructor(private val repository: Repository){
-
-    // suspend operator fun invoke(list:List<ScanObjectDomain>) = repository.insertScanCode(list.map { it.toDatabase() })
     suspend operator fun invoke(scan: ScanObjectDomain): Long {
         return repository.insertScanCode(scan.toDatabase())
     }

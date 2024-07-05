@@ -16,6 +16,20 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-1596913974">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Genymobile Nexus 10" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="Xiaomi 2201117TG" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1348651936">
           <value>
             <AndroidTestResultsTableState>
@@ -31,6 +45,19 @@
           </value>
         </entry>
         <entry key="-1260518308">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Genymobile Nexus 10" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-547293982">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
@@ -83,7 +110,33 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="1518020646">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Genymobile Nexus 10" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="1596831520">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Genymobile Nexus 10" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="2128078285">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">

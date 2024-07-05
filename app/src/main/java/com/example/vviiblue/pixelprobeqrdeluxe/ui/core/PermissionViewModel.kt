@@ -1,7 +1,6 @@
 package com.example.vviiblue.pixelprobeqrdeluxe.ui.core
 
 import androidx.lifecycle.ViewModel
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.model.ScanObjectUI
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

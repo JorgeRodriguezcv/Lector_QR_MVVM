@@ -1,6 +1,5 @@
 package com.example.vviiblue.pixelprobeqrdeluxe.ui.scan
 
-import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,30 +10,23 @@ import com.example.vviiblue.pixelprobeqrdeluxe.databinding.FragmentScanBinding
 import android.util.Log
 import android.util.Size
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.vviiblue.pixelprobeqrdeluxe.R
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.barcode.QrCodeAnalyzer
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.barcode.view.BarcodeBoxView
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.history.HistoryFragment
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.history.HistoryViewModel
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.home.HomeFragment
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.home.HomeViewModel
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.model.ScanObjectUI
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ScanFragment : Fragment() {
@@ -54,8 +46,8 @@ class ScanFragment : Fragment() {
     }
 
     private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission() //Se solicita el permiso
-    ) { isGranted -> // Indica si el permiso fue otorgado o no (true o false)
+        ActivityResultContracts.RequestPermission() //Permission is requested
+    ) { isGranted -> // Indicates whether the permission was granted or not (true o false)
         if (isGranted) {
             startCamera()
         } else {
@@ -78,7 +70,7 @@ class ScanFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (checkCameraPermission()) {
-            //Tiene permisos aceptados
+            //Permissions have been accepted
             startCamera()
         } else {
             requestPermissionLauncher.launch(CAMERA_PERMISSION)
@@ -95,7 +87,8 @@ class ScanFragment : Fragment() {
 
     private fun initScanCamera() {
         barcodeBoxView = BarcodeBoxView(requireContext())
-        /**  Se agrega la vista "barcodeBoxView" en el fragmen scan y se le especifica que tome todo el espacio del padre (fragmentScan)*/
+        /** The 'barcodeBoxView' view is added to the scan fragment and is specified to
+         *  take all the space of its parent (fragmentScan) */
         (view as ViewGroup).addView(
             barcodeBoxView,
             ViewGroup.LayoutParams(
@@ -131,15 +124,15 @@ class ScanFragment : Fragment() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
-            // Obtengo la cámara disponible
+            // I get the available camera
             val cameraProvider = cameraProviderFuture.get()
 
-            // Configurar la vista previa
+            // I configured the preview view
             val preview = Preview.Builder().build().also { preview ->
                 preview.setSurfaceProvider(binding.rvCameraScan.surfaceProvider)
             }
 
-            // Configurar el análisis de imagen para detectar códigos de barras
+            // Set up image analysis to detect barcodes
             val imageAnalysis = ImageAnalysis.Builder()
                 .setTargetResolution(Size(1280, 720))
                 .build()
@@ -155,16 +148,16 @@ class ScanFragment : Fragment() {
 
                 }
 
-            // Seleccionar la cámara trasera
+            // choose the back camera
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-                // Unir la vista previa y el análisis de imagen
+                // Unite preview and image analysis
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageAnalysis
                 )
             } catch (exc: Exception) {
-                Log.e(TAG, "Error al iniciar la cámara: ${exc.message}", exc)
+                Log.e(TAG, "Error starting the camera: ${exc.message}", exc)
             }
 
         }, ContextCompat.getMainExecutor(requireContext()))
@@ -176,7 +169,7 @@ class ScanFragment : Fragment() {
             val scanObjectUI = ScanObjectUI(-1, result.trim(), "...", note)
             scanViewModel.insertScanCode(scanObjectUI)
         }
-        /** cierro el scan */
+        /** I close the scan */
         exitScanCam()
     }
 

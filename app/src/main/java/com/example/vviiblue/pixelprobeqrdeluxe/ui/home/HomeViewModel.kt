@@ -24,7 +24,7 @@ class HomeViewModel @Inject constructor(
     val listScanCodes: StateFlow<List<ScanObjectUI>> = _listScanCodes
 
     private var _webViewEvents = MutableStateFlow<WebViewEvent>(WebViewEvent.PageFinished)
-    val webViewEvent : StateFlow<WebViewEvent> = _webViewEvents
+    val webViewEvent: StateFlow<WebViewEvent> = _webViewEvents
 
     private var _selectedItem = MutableStateFlow<SelectedItem?>(null)
     val selectedItem: StateFlow<SelectedItem?> = _selectedItem
@@ -33,32 +33,29 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             scanRepository.getAllScanCodes()
             scanRepository.listScanCodes.collect { listScans ->
-                _listScanCodes.value = if (listScans.size > 3) listScans.subList(0, 3) else listScans
+                _listScanCodes.value =
+                    if (listScans.size > 3) listScans.subList(0, 3) else listScans
             }
         }
     }
 
     fun getAllScanCodes() {
-        /** lanzo una corrutina, para invocar la operacion del caso de uso que es Suspend */
+        /** I launched a coroutine, to invoke the operation of the use case that uses Suspend */
         viewModelScope.launch {
-                val listScans = withContext(Dispatchers.IO) { scanRepository.getAllScanCodes() }/*= scanRepository.getAllScanCodes()*/
-            _listScanCodes.value =  if (listScans.size > 3) listScans.subList(0, 3) else listScans
+            val listScans =
+                withContext(Dispatchers.IO) { scanRepository.getAllScanCodes() }/*= scanRepository.getAllScanCodes()*/
+            _listScanCodes.value = if (listScans.size > 3) listScans.subList(0, 3) else listScans
         }
     }
 
     fun deleteScan(idCodeScan: Int) {
         viewModelScope.launch {
             try {
-                println("Antes - Se elimina el idCodeScan : $idCodeScan")
-                println("Antes - listScanCodes : ${listScanCodes.value}")
-              scanRepository.deleteScanCode(idCodeScan)
-
+                scanRepository.deleteScanCode(idCodeScan)
                 val updatedList = _listScanCodes.value.filter { it.scanIdCode != idCodeScan }
                 _listScanCodes.value = updatedList
-                println("Despues - Se elimina el idCodeScan : $idCodeScan")
-                println("Despues - listScanCodes : ${listScanCodes.value}")
             } catch (e: Exception) {
-                println("Error al eliminar el objeto: ${e.message}")
+                println("Error deleting object: ${e.message}")
             }
         }
     }
@@ -78,12 +75,18 @@ class HomeViewModel @Inject constructor(
                 _webViewEvents.value = WebViewEvent.PageStarted
                 _selectedItem.value = SelectedItem.Url(dataScan.url)
             }
+
             is ScanData.Text -> {
                 _selectedItem.value = SelectedItem.Text(dataScan.text)
             }
+
             is ScanData.Wifi -> {
                 val listPartsConfigWifi = getConfigurationWifi(dataScan.wifiData)
-                _selectedItem.value = SelectedItem.Wifi(listPartsConfigWifi[0], listPartsConfigWifi[1], listPartsConfigWifi[2])
+                _selectedItem.value = SelectedItem.Wifi(
+                    listPartsConfigWifi[0],
+                    listPartsConfigWifi[1],
+                    listPartsConfigWifi[2]
+                )
             }
         }
     }

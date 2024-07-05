@@ -99,7 +99,7 @@ class QrCodeAnalyzer(
     private fun showDialogNote(result: String) {
         val builder = AlertDialog.Builder(context)
         builder.setMessage(context.getString(R.string.add_message_dialog_note))
-            .setPositiveButton("Sí") { _, _ ->
+            .setPositiveButton("Yes") { _, _ ->
                 showInputNoteDialog(result)
             }
             .setNegativeButton("No") { _, _ ->

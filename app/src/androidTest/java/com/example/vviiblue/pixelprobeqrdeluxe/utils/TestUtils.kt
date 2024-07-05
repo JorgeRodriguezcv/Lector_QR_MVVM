@@ -13,7 +13,6 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers
 import com.example.vviiblue.pixelprobeqrdeluxe.HiltTestActivity
 import com.example.vviiblue.pixelprobeqrdeluxe.R
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.main.MainActivity
 import org.hamcrest.Matcher
 
 /** Function for launch a Fragment inside an Activity with support for HiltFunction*/
@@ -34,7 +33,7 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
 
     // Lanzar el HiltTestActivity usando ActivityScenario
     ActivityScenario.launch<HiltTestActivity>(startActivityIntent).onActivity { activity ->
-        // Instanciar el Fragmento que necesitamos probar dentro del Activity HiltTestActivity
+        // Instanciar el Fragmento que necesito probar dentro del Activity HiltTestActivity
         val fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
             checkNotNull(T::class.java.classLoader),
             T::class.java.name

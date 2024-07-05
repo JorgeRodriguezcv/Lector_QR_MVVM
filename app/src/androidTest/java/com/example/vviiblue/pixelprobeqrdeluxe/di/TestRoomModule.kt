@@ -16,7 +16,7 @@ import com.example.vviiblue.pixelprobeqrdeluxe.domain.Repository
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [RoomModule::class] // Reemplazamos el módulo de producción
+    replaces = [RoomModule::class] // i replaced the production module
 )
 object TestRoomModule {
 
@@ -24,7 +24,7 @@ object TestRoomModule {
     @Singleton
     fun provideInMemoryDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
-            .allowMainThreadQueries() // Solo para pruebas
+            .allowMainThreadQueries() // Just for testing
             .build()
     }
 

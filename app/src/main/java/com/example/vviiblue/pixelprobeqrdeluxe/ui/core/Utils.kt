@@ -24,7 +24,7 @@ object Utils { // static utls
 
     }
 
-    /** Función de extensión para convertir un String a Editable */
+    /**extension method to convert String to Editable */
     fun String.toEditable(): Editable {
         return Editable.Factory.getInstance().newEditable(this)
     }

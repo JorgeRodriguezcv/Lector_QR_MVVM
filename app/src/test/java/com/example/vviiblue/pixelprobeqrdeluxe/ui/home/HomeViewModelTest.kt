@@ -5,7 +5,6 @@ import com.example.vviiblue.pixelprobeqrdeluxe.motherobject.ScanCodesMotherObjec
 import com.example.vviiblue.pixelprobeqrdeluxe.motherobject.ScanCodesMotherObject.textDataTest
 import com.example.vviiblue.pixelprobeqrdeluxe.motherobject.ScanCodesMotherObject.urlDataTest
 import com.example.vviiblue.pixelprobeqrdeluxe.motherobject.ScanCodesMotherObject.wifiDataTest
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.ScanData
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.ScanRepository
 import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.SelectedItem
 
@@ -16,19 +15,14 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-//*****
 
 class HomeViewModelTest{
 
@@ -36,9 +30,7 @@ class HomeViewModelTest{
     lateinit var scanRepository: ScanRepository
     private lateinit var viewModel: HomeViewModel
 
-    // I create a "fake" main dispatcher to replace "Dispatchers.Main" in the test, i don't have access to the Android Main Thread in the "Unit Test", this is necessary because it is used in "HomeViewModel"
- //  private val testDispatcher = UnconfinedTestDispatcher()
-
+    //this rule replaces the main dispatcher with a TestDispatcher for tests, ensuring that coroutines execute in a predictable manner.
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 

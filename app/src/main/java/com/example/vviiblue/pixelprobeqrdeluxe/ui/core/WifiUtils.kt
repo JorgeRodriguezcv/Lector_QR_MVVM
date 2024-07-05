@@ -7,7 +7,6 @@ import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 
 object  WifiUtils {
 
@@ -19,7 +18,7 @@ object  WifiUtils {
         }
     }
 
-    // Para versiones anteriores a Android 10
+    // for versions earlier than Android 10
     private fun connectToWifiLegacy(context: Context,securityType: String, password: String, ssid: String) {
         val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val wifiConfig = WifiConfiguration().apply {
@@ -60,7 +59,7 @@ object  WifiUtils {
         }
     }
 
-    // Para Android 10 en adelante
+    // from Android 10 and later
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun connectToWifiSuggestion(context: Context,securityType: String, password: String, ssid: String) {
         val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -73,7 +72,7 @@ object  WifiUtils {
                     "WPA3" -> setWpa3Passphrase(password)
                     "OPEN" -> setIsEnhancedOpen(true)
                     else -> {
-                        Toast.makeText(context.applicationContext, "Error al añadir red", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context.applicationContext, "Error adding network", Toast.LENGTH_SHORT).show()
                     return
                     }
                 }
@@ -84,9 +83,9 @@ object  WifiUtils {
         val status = wifiManager.addNetworkSuggestions(suggestionsList)
 
         if (status == WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
-            Toast.makeText(context.applicationContext, "Red añadida", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context.applicationContext, "Added network", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context.applicationContext, "Error al añadir red", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context.applicationContext, "Error adding network", Toast.LENGTH_SHORT).show()
         }
     }
 

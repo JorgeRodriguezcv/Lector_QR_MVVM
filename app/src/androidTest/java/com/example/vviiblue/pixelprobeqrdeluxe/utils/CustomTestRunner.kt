@@ -11,7 +11,6 @@ class CustomTestRunner : AndroidJUnitRunner() {
         className: String?,
         context: Context?
     ): Application {
-       // return super.newApplication(cl, className, context)
         /** to test with daggerHilt */
         return super.newApplication(cl, HiltTestApplication::class.java.name, context)
     }

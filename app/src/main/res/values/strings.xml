@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">PixelProbe QR Deluxe</string>
 
-    <!--    bottomBar-->
     <string name="home">Home</string>
     <string name="history">History</string>
     <string name="wifiCodeQR">WiFi QR Code</string>
@@ -9,10 +8,10 @@
     <string name="password">Password:</string>
     <string name="encryption">Encryption:</string>
     <string name="textCodeQR">TEXT QR Code</string>
-    <string name="error_wifi_permission">Permiso de WIFI denegado</string>
+    <string name="error_wifi_permission">Wifi permission denied</string>
     <string name="accept_dialog_wifi">Add</string>
     <string name="cancel_dialog">Cancel</string>
-    <string name="accept_permission">Acepta los permisos</string>
+    <string name="accept_permission">Accept the permissions</string>
     <string name="accept_dialog">Accept</string>
     <string name="add_message_dialog_note">Do you want to enter a note?</string>
     <string name="add_a_note">Enter a Note</string>

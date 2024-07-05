@@ -110,7 +110,7 @@ class HistoryFragment : Fragment() {
                 val dialogView = inflater.inflate(R.layout.layout_view_text_form, null)
                 val bindingDialog = LayoutViewTextFormBinding.bind(dialogView)
 
-                bindingDialog.root.setBackgroundResource(R.color.accent)
+                bindingDialog.root.setBackgroundResource(R.color.white)
                 bindingDialog.root.isVisible = true
                 bindingDialog.textContent.text = dataScan.text
 
@@ -122,7 +122,7 @@ class HistoryFragment : Fragment() {
                 val dialogView = inflater.inflate(R.layout.layout_view_wifi_form, null)
                 val bindingDialog = LayoutViewWifiFormBinding.bind(dialogView)
                 val listPartsConfigWifi = getConfigurationWifi(dataScan.wifiData)
-                bindingDialog.root.setBackgroundResource(R.color.accent)
+                bindingDialog.root.setBackgroundResource(R.color.white)
                 bindingDialog.root.isVisible = true
 
                 bindingDialog.apply {
@@ -138,7 +138,7 @@ class HistoryFragment : Fragment() {
     }
 
     private fun showDialog(dialogView: View, dataScan: ScanData?) {
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomDialog)
 
         if(dataScan is ScanData.Wifi){
             builder.setView(dialogView)

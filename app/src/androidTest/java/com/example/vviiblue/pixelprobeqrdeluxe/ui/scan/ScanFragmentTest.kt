@@ -1,8 +1,5 @@
 package com.example.vviiblue.pixelprobeqrdeluxe.ui.scan
 
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -12,9 +9,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.rule.GrantPermissionRule
 import com.example.vviiblue.pixelprobeqrdeluxe.R
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.home.HomeFragment
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.scan.ScanFragment
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.scan.ScanViewModel
 import com.example.vviiblue.pixelprobeqrdeluxe.utils.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

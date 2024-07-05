@@ -11,11 +11,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.spyk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -30,19 +26,13 @@ class ScanViewModelTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
-  //  private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setUp(){
 
-     //   Dispatchers.setMain(testDispatcher)
-
         MockKAnnotations.init(this, relaxUnitFun = true)
 
-        // With spyk, i can use the real object but change the behavior of some methods that i want to override.
-        // In this case, i override "getCurrentDate" because we need it to always return "sábado, 25 de 2024".
-        // Otherwise, the object passed in "coEvery" and "coVerify" would have different "scanDate" values.
-        // Note: "getCurrentDate" needs to be a protected method to be mockable.
+        // With spyk, i can use the real object but change the behavior of some methods that i want to override
         scanViewModel = spyk(ScanViewModel(scanRepository))
     }
 

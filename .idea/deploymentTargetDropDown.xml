@@ -2,19 +2,25 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="HiltTestActivity">
-        <State />
-      </entry>
       <entry key="HomeFragmentTest">
-        <State />
-      </entry>
-      <entry key="MainActivityTest">
         <State />
       </entry>
       <entry key="ScanFragmentTest">
         <State />
       </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="testScanFragment()">
+        <State />
+      </entry>
+      <entry key="when_recycleViews_icon_web_is_selected_open_browser()">
+        <State />
+      </entry>
+      <entry key="when_recycleViews_item_is_selected_and_is_text_show_Wifi_Info()">
+        <State />
+      </entry>
+      <entry key="when_recycleViews_item_is_selected_and_is_url_open_webView()">
         <State />
       </entry>
     </value>

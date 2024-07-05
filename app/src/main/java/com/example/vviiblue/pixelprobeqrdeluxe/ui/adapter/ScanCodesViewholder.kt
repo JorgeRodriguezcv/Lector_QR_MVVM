@@ -117,7 +117,6 @@ class ScanCodesViewholder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun isWifiValid(configuracion: String): Boolean {
         val regex = Regex("^WIFI:T:(.*);S:(.*);P:(.*);H:(.*);;$")
-
         return regex.matches(configuracion.trim())
     }
 

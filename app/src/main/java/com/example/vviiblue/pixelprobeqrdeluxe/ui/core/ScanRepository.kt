@@ -16,52 +16,48 @@ class ScanRepository @Inject constructor(
     private val _getScanCodesUseCase: GetScanCodesUseCase,
     private val _deleteScanCodeUseCase: DeleteScanCodeUseCase,
     private val _insertScanCodesUseCase: InsertScanCodesUseCase
-){
+) {
 
     private val _listScanCodes = MutableStateFlow<List<ScanObjectUI>>(emptyList())
     val listScanCodes: StateFlow<List<ScanObjectUI>> = _listScanCodes
 
-     suspend  fun getAllScanCodes(): List<ScanObjectUI> {
-         println("ScanRepository getAllScanCodes ")
-        if(_listScanCodes.value.isEmpty()) {
+    suspend fun getAllScanCodes(): List<ScanObjectUI> {
+        if (_listScanCodes.value.isEmpty()) {
             val listScans = withContext(Dispatchers.IO) { _getScanCodesUseCase() }
             _listScanCodes.value = listScans
         }
         return _listScanCodes.value
     }
 
-     suspend fun insertScanCode(scanCode: ScanObjectUI) {
-         withContext(Dispatchers.IO) {
-             val id = _insertScanCodesUseCase(scanCode.toScanDomain())
-             if (id != null) {
-                 scanCode.copy(scanIdCode = id.toInt()).also { updatedScan ->
+    suspend fun insertScanCode(scanCode: ScanObjectUI) {
+        withContext(Dispatchers.IO) {
+            val id = _insertScanCodesUseCase(scanCode.toScanDomain())
+            if (id != null) {
+                scanCode.copy(scanIdCode = id.toInt()).also { updatedScan ->
 
-                     _listScanCodes.value = listOf(updatedScan) + _listScanCodes.value //listOf(updatedScan) creo una lista con un solo elemento
-                     Log.d("Insert", "Inserted scan with ID: $id")
-                 }
-             } else {
-                 Log.e("Insert", "Failed to insert scan")
-             }
-         }
-    }
-
-     suspend fun deleteScanCode(idCodeScan: Int) {
-            try {
-                /** ejecuto en hilo secundario */
-                println("ScanRepository deleteScanCode - idCodeScan: $idCodeScan")
-                withContext(Dispatchers.IO) { _deleteScanCodeUseCase(idCodeScan) }.also {
-                    onScanDeleteScan(idCodeScan)
+                    _listScanCodes.value =
+                        listOf(updatedScan) + _listScanCodes.value // i created a list with only one element
+                    Log.d("Insert", "Inserted scan with ID: $id")
                 }
-            } catch (e: Exception) {
-                println("Error al eliminar el objeto: ${e.message}")
+            } else {
+                Log.e("Insert", "Failed to insert scan")
             }
+        }
     }
 
+    suspend fun deleteScanCode(idCodeScan: Int) {
+        try {
+            /** Execute on a secondary thread */
+            withContext(Dispatchers.IO) { _deleteScanCodeUseCase(idCodeScan) }.also {
+                onScanDeleteScan(idCodeScan)
+            }
+        } catch (e: Exception) {
+            println("error deleting the object: ${e.message}")
+        }
+    }
 
     fun onScanDeleteScan(idCodeScan: Int) {
-        // actualiza la lista y notifica a los observadores
-        println("Antes - onScanDeleteScan - _listScanCodes.value: ${listScanCodes.value}")
+        // update the list and notify the observers
         _listScanCodes.value = listScanCodes.value.filter { it.scanIdCode != idCodeScan }
-        println("Despues - onScanDeleteScan - _listScanCodes.value: ${listScanCodes.value}")
     }
 }

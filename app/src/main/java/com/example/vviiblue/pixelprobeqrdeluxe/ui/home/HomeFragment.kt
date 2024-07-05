@@ -1,17 +1,9 @@
 package com.example.vviiblue.pixelprobeqrdeluxe.ui.home
 
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
-import android.net.wifi.WifiConfiguration
-import android.net.wifi.WifiManager
-import android.net.wifi.WifiNetworkSuggestion
-import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +11,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -62,10 +53,9 @@ class HomeFragment : Fragment() {
         if (permissions.all { it.value }) {
             permissionViewModel.setPermissionsGranted(true)
         } else {
-            Toast.makeText(requireContext(), "Permiso de WIFI denegado", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "wifi permission denied", Toast.LENGTH_LONG).show()
         }
     }
-
 
 
     override fun onCreateView(
@@ -82,7 +72,6 @@ class HomeFragment : Fragment() {
         initRecycleview()
         initListeners()
         initObserves()
-
         checkPermissionsAndConnect()
     }
 
@@ -97,7 +86,6 @@ class HomeFragment : Fragment() {
     private fun initUI() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-               // homeViewModel.getAllScanCodes()
                 homeViewModel.listScanCodes.collect { listScans ->
                     withContext(Dispatchers.Main.immediate) {
                         scansAdapter.updateList(listScans)
@@ -113,7 +101,7 @@ class HomeFragment : Fragment() {
             onItemSelected = { itemScanSelected -> onItemSelected(itemScanSelected) },
             onDeleteItem = { itemToDelete -> deleteScanCode(itemToDelete) },
             goToActionScan = { itemScanSelected -> goToActionScan(itemScanSelected) },
-            onNoteItem = { itemNoteSelected -> onNoteItem(itemNoteSelected)}
+            onNoteItem = { itemNoteSelected -> onNoteItem(itemNoteSelected) }
         )
 
 
@@ -142,7 +130,7 @@ class HomeFragment : Fragment() {
             ) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
                 homeViewModel.onPageFinished()
-                Toast.makeText(requireContext(), "Error al cargar la página", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Error loading web page", Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -176,11 +164,14 @@ class HomeFragment : Fragment() {
                             binding.idWebViewInclude.root.isVisible = true
                             binding.idWebViewInclude.webView.loadUrl(selectedItem.url)
                         }
+
                         is SelectedItem.Text -> {
                             binding.idTextInclude.root.isVisible = true
-                            binding.idTextInclude.textTitle.text = requireContext().getString(R.string.textCodeQR)
+                            binding.idTextInclude.textTitle.text =
+                                requireContext().getString(R.string.textCodeQR)
                             binding.idTextInclude.textContent.text = selectedItem.text.toEditable()
                         }
+
                         is SelectedItem.Wifi -> {
                             binding.idWifiInclude.root.isVisible = true
                             binding.idWifiInclude.apply {
@@ -189,6 +180,7 @@ class HomeFragment : Fragment() {
                                 textNetworkName.text = selectedItem.networkName.toEditable()
                             }
                         }
+
                         null -> {
 
                         }
@@ -210,9 +202,8 @@ class HomeFragment : Fragment() {
     }
 
 
-
     private fun deleteScanCode(idCodeScan: Int) {
-            homeViewModel.deleteScan(idCodeScan)
+        homeViewModel.deleteScan(idCodeScan)
     }
 
     private fun goToActionScan(dataScan: ScanData) {
@@ -225,7 +216,8 @@ class HomeFragment : Fragment() {
 
             is ScanData.Text -> {
                 binding.idTextInclude.root.isVisible = true
-                binding.idTextInclude.textTitle.text = requireContext().getString(R.string.textCodeQR)
+                binding.idTextInclude.textTitle.text =
+                    requireContext().getString(R.string.textCodeQR)
                 binding.idTextInclude.textContent.text = dataScan.text.toEditable()
             }
 

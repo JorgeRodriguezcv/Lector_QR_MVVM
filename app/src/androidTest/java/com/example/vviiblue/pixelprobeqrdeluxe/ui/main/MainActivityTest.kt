@@ -9,7 +9,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.GrantPermissionRule
 import com.example.vviiblue.pixelprobeqrdeluxe.R
@@ -34,10 +33,6 @@ class MainActivityTest {
 
     /**  This test has made with "Record Espresso test"   */
     /*****************************************************/
-
-//    @Rule
-//    @JvmField
-//    var mActivityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
     @get:Rule(order=1)
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)

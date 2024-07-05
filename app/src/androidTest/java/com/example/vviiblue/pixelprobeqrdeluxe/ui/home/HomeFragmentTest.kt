@@ -10,7 +10,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -23,9 +22,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import androidx.test.filters.SmallTest
-import com.example.vviiblue.pixelprobeqrdeluxe.data.database.dao.AppDatabase
 import com.example.vviiblue.pixelprobeqrdeluxe.data.database.dao.ScanCodeDao
-import com.example.vviiblue.pixelprobeqrdeluxe.data.database.entities.ScanCodeEntity
 import com.example.vviiblue.pixelprobeqrdeluxe.motherobject.ScanCodesMotherObject.listTestScans
 import com.example.vviiblue.pixelprobeqrdeluxe.utils.clickInChild
 import com.example.vviiblue.pixelprobeqrdeluxe.utils.launchFragmentInHiltContainer
@@ -39,11 +36,8 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.rule.GrantPermissionRule
-import com.example.vviiblue.pixelprobeqrdeluxe.ui.core.WifiUtils
 import org.hamcrest.core.AllOf.allOf
-import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
 
 @RunWith(AndroidJUnit4::class)
 @SmallTest
@@ -51,7 +45,6 @@ import org.mockito.Mockito.verify
 class HomeFragmentTest {
 
     private lateinit var mockContext: Context
-    private lateinit var mockWifiUtils: WifiUtils
 
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
@@ -71,11 +64,11 @@ class HomeFragmentTest {
     fun setUp() {
         hiltRule.inject()
 
-        //I prepare the Intents, for the Test that verifies the navigation with the browser
+        //Initialize Intents for the test that verifies navigation with the browser
         Intents.init()
 
         runBlocking {
-            // Insertar datos de prueba en la base de datos
+            // insert test data into the database
             scanDao.insertAllScanCodes(
                 listTestScans
             )
@@ -87,7 +80,6 @@ class HomeFragmentTest {
 
         //I simulate the objects
         mockContext = mock(Context::class.java)
-//        mockWifiUtils = mock(WifiUtils::class.java)
 
     }
 
@@ -99,11 +91,11 @@ class HomeFragmentTest {
 
     @Test
     fun when_recycleViews_item_is_selected_and_is_url_open_webView() = runTest {
-        // Usa Espresso para esperar a que el RecyclerView esté listo
+        // i need to be sure that the RecyclerView is ready, for that i use Espresso
         onView(withId(R.id.rvHome))
             .check(matches(isDisplayed()))
 
-        // Realiza una acción en un elemento específico del RecyclerView
+        // i doing a specific action in an item of the RecyclerView
         onView(withId(R.id.rvHome))
             .perform(
                 RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
@@ -112,7 +104,7 @@ class HomeFragmentTest {
                 )
             )
 
-        // Verifica que la nueva vista se muestra después del clic
+        // I verify that the new view is displayed after click
         onView(withId(R.id.idWebViewInclude))
             .check(matches(isDisplayed()))
 
@@ -122,11 +114,9 @@ class HomeFragmentTest {
     @Test
     fun when_recycleViews_item_is_selected_and_is_text_show_textArea() = runTest {
 
-        // Usa Espresso para esperar a que el RecyclerView esté listo
         onView(withId(R.id.rvHome))
             .check(matches(isDisplayed()))
 
-        // Realiza una acción en un elemento específico del RecyclerView
         onView(withId(R.id.rvHome))
             .perform(
                 RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
@@ -135,7 +125,6 @@ class HomeFragmentTest {
                 )
             )
 
-        // Verifica que la nueva vista se muestra después del clic
         onView(withId(R.id.idTextInclude))
             .check(matches(isDisplayed()))
 
@@ -144,11 +133,9 @@ class HomeFragmentTest {
     @Test
     fun when_recycleViews_item_is_selected_and_is_text_show_Wifi_Info() = runTest {
 
-        // Usa Espresso para esperar a que el RecyclerView esté listo
         onView(withId(R.id.rvHome))
             .check(matches(isDisplayed()))
 
-        // Realiza una acción en un elemento específico del RecyclerView
         onView(withId(R.id.rvHome))
             .perform(
                 RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
@@ -157,7 +144,6 @@ class HomeFragmentTest {
                 )
             )
 
-        // Verifica que la nueva vista se muestra después del clic
         onView(withId(R.id.idWifiInclude))
             .check(matches(isDisplayed()))
 
@@ -300,32 +286,5 @@ class HomeFragmentTest {
             hasData(Uri.parse("https://example.com"))
         ))
     }
-
-//    @Test
-//    fun when_recycleViews_action_icon_wifi_is_selected_attempt_wifi_connection() {
-//
-//        onView(withId(R.id.rvHome))
-//            .check(matches(isDisplayed()))
-//
-//
-//        onView(withId(R.id.rvHome))
-//            .perform(
-//                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-//                    2,
-//                    clickInChild(R.id.ivActionScanItem)  // Reemplaza con el ID del ícono de acción
-//                )
-//            )
-//
-//        // Verifiy that the method "connectionWifi" has been called with these parameters
-//        verify(mockWifiUtils).connectToWifi(
-//            eq(mockContext),
-//            eq("WPA2"),
-//            eq("password123"),
-//            eq("MyNetworkSSID")
-//        )
-//    }
-
-
-
 
 }

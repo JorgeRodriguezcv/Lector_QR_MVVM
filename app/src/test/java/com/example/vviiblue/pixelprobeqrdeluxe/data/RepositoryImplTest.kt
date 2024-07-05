@@ -16,13 +16,13 @@ import org.junit.jupiter.api.Assertions.*
 class RepositoryImplTest {
 
     @MockK
-    lateinit var dao: ScanCodeDao   // I inject dependency, i simulate the injection with dagger hilt
+    lateinit var dao: ScanCodeDao   // We create a mock of the ScanCodeDao dependency
     private lateinit var repositoryImpl: RepositoryImpl
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this) // if i don't want to test all operations, just need to add "relaxUnitFun = true"
-        repositoryImpl = RepositoryImpl(dao) // i make a repositoryImpl instance
+        MockKAnnotations.init(this) // we initialize the MockK annotations; If we don't want to test all operations, we can add "relaxUnitFun = true"
+        repositoryImpl = RepositoryImpl(dao) //  i make a repositoryImpl instance
     }
 
 
